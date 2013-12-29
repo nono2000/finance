@@ -1,0 +1,31 @@
+<!doctype html>
+<html ng-app="finance">
+	<head>
+		<meta charset="UTF-8"/>
+		<title>Finance</title>
+		<script src="angular.js"></script>
+		<script src="finance.js"></script>
+		<link rel="stylesheet" href="bootstrap.css">
+	</head>
+	<body>
+		<div ng-controller="ShowCtrl" class="well">
+		<div>Date: {{today}}</div>
+		<form>
+			<div>Event: <input type="text" ng-model="item"></div>
+			<div>Amount: <input type="text" ng-model="amount"></div>
+			<button class="btn-primary" ng-click="save(item,amount)">Submit</button>
+			<button class="btn-primary" ng-click="cancel()">Cancel</button>
+		</form>
+		<table>
+			<tr>
+				<th>Event</th>
+				<th>Amount</th>
+			</tr>
+			<tr ng-repeat="money in moneys">
+				<td>{{money.item}}</td>
+				<td>{{money.amount}}</td>
+			</tr>
+		</table>
+	</div>		
+	</body>
+</html>
