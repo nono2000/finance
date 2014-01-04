@@ -7,7 +7,7 @@ app.controller('ShowCtrl',['$scope', '$http','$filter',
 		$scope.searchType = '';
 		$scope.predicate = 'addDate';
 		$scope.reverse = true;
-		$scope.paginate = 3;
+		$scope.paginate = 10;
 		$scope.currentPage = 0;
 		$scope.currentNav =  0;
 		var	navSize = $scope.navSize = 10,
@@ -63,6 +63,8 @@ app.controller('ShowCtrl',['$scope', '$http','$filter',
 		$scope.$watch('filteredMoneys', function() {
 			var total = 0,
 			    count = 0,
+				currentNav = $scope.currentNav,
+				currentPage = $scope.currentPage,
 				oldTotalPages = $scope.totalPages;
 			$scope.pages = [];
 			angular.forEach($scope.filteredMoneys, function (money) {
@@ -75,9 +77,11 @@ app.controller('ShowCtrl',['$scope', '$http','$filter',
 			for (var i = 0 ; i < totalPages; i++){
 				$scope.pages.push({pageNo:i});
 			}
-			if (totalPages !== oldTotalPages){
-				$scope.currentPage = 0;
-				$scope.currentNav = 0;
+			if (totalPages < oldTotalPages){
+				if ( currentNav >= totalNavs || currentPage >= totalPages){
+					$scope.currentPage = 0;
+					$scope.currentNav = 0;
+				}
 			}
 		}, true);
 
