@@ -16,7 +16,7 @@
 			  <div class="form-group">
 				  <label class="col-md-1 control-label">Date: </label>
 				  <div class="col-md-4 col-md-offset-1">
-						<input class="form-control" type="text" ng-model="adddate">
+						<input class="form-control" type="text" ng-model="addDate">
 				  </div>
 			  </div>
 			  <div class="form-group">
@@ -29,7 +29,7 @@
 			  	</div>
 			  </div>
 				<div class="form-group">
-			 		<label class="col-md-1 control-label">Event: </label>			
+			 		<label class="col-md-1 control-label">Event: </label>
 					<div class="col-md-4 col-md-offset-1">
 						<input class="form-control" type="text" ng-model="item" placeholder="Category - Detail">
 					</div>
@@ -42,7 +42,7 @@
 				</div>
 				<div class="form-group">
 						<div class="col-md-1 col-md-offset-2">
-							<button class="btn btn-primary" ng-click="save(item,amount,payment,adddate)">Submit</button>
+							<button class="btn btn-primary" ng-click="save(item,amount,payment,addDate)">Submit</button>
 						</div>
 						<div class="col-md-1 col-md-offset-1">
 							<button class="btn btn-default" ng-click="cancel()">Cancel</button>
@@ -65,7 +65,7 @@
 			  	</div>
 			  </div>
 				<div class="form-group">
-			 		<label class="col-md-1 control-label">To: </label>			
+			 		<label class="col-md-1 control-label">To: </label>
 					<div class="col-md-4 col-md-offset-1">
 						<input class="form-control" type="text" ng-model="endDate" placeholder="yyyy/MM/dd">
 					</div>
@@ -89,26 +89,46 @@
 			</div>
 		</div>
 		<hr>
+		<table ng-show = "totalPages > 1">
+		<tbody>
+			<td ng-show="totalPages > navSize">
+				<button ng-disabled="currentPage - navSize < 0" ng-click="shiftNav(currentNav - 1)" class="btn btn-default">&lt;&lt;</button>
+			</td>
+			<td>
+				<button ng-disabled="currentPage <= 0" ng-click="navPage(currentPage - 1)" class="btn btn-default">Prev</button>
+			</td>
+			<td ng-repeat="page in pages |pagination:currentNav:navSize">
+				<button ng-click="navPage(page.pageNo) " class="btn btn-default" ng-class="{active: currentPage == page.pageNo}">{{ page.pageNo + 1 }}</button>
+			</td>
+			<td>
+				<button ng-disabled="currentPage >= totalPages - 1" ng-click="navPage(currentPage + 1)" class="btn btn-default">Next</button>
+			</td>
+			<td ng-show="totalPages > navSize">
+				<button ng-disabled="currentPage + navSize >= totalPages" ng-click="shiftNav(currentNav + 1)" class="btn btn-default">&gt;&gt;</button>
+			</td>
+
+			</tbody>
+		</table>
 		<table class="table table-striped">
 			<thead>
 			<tr>
 				<th class="col-md-4"><a href="" ng-click="predicate = 'item'; reverse=!reverse">Event</a></th>
 				<th class="col-md-1"><a href="" ng-click="predicate = 'amount'; reverse=!reverse">Amount ({{total}})</a></th>
 				<th class="col-md-1"><a href="" ng-click="predicate = 'payment'; reverse=!reverse">Payment</a></th>
-				<th class="col-md-1"><a href="" ng-click="predicate = 'adddate'; reverse=!reverse">Date</a></th>
+				<th class="col-md-1"><a href="" ng-click="predicate = 'addDate'; reverse=!reverse">Date</a></th>
 				<th class="col-md-1"><a href="">Delete</a></th>
 			</tr>
 			</thead>
 			<tbody>
-			<tr ng-repeat="money in filteredMoneys = (moneys | filter:{item:keyword} | filter:{payment:searchType} | daterange:startDate:endDate) | orderBy:predicate:reverse">
+			<tr ng-repeat="money in filteredMoneys = (moneys | filter:{item:keyword} | filter:{payment:searchType} | daterange:startDate:endDate | orderBy:predicate:reverse )| pagination:currentPage:paginate">
 				<td>{{money.item}}</td>
 				<td>{{money.amount}}</td>
 				<td>{{money.payment}}</td>
-				<td>{{money.adddate}}</td>
+				<td>{{money.addDate | date:'yyyy/MM/dd'}}</td>
 				<td>[ <a href="" ng-click="delete(money)">x</a> ]</td>
 			</tr>
 			<tbody>
 		</table>
-	</div>		
+	</div>
 	</body>
 </html>
